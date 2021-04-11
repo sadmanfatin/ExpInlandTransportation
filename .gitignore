@@ -9,3 +9,5 @@ ViewController/classes/.data/00000000/0000003e.jdb
 *.cdi_javac
 *.jdb
 *.sso
+deploy/ExpInlandTransportation_application1.ear
+ViewController/deploy/ExpInlandTransportation_ViewController_webapp1.war

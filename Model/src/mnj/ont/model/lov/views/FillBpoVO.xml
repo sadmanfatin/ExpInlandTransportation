@@ -48,50 +48,50 @@
        
        FROM 
 
-    (  select plv.org DIVISION_ID ,
-        plv.PCK_LST_NO  PACK_LIST,
+    ( select v1.org DIVISION_ID ,
+        v1.PCK_LST_NO  PACK_LIST,
         
-        plv.BUYER_ID CUST_ID ,
-        plv.STYLE_NAME STYLE,
-         plv.STYLE_NUMBER ,
-         plv.SEASON,
-         plv.SALESORDER_NO BPO_NUMBER,
+        v1.BUYER_ID CUST_ID ,
+        v1.STYLE_NAME STYLE,
+         v1.STYLE_NUMBER ,
+         v1.SEASON,
+         v1.SALESORDER_NO BPO_NUMBER,
          
          
         (select customer_name
           from ar_customers ac
-          where ac.CUSTOMER_ID = plv.BUYER_ID
+          where ac.CUSTOMER_ID = v1.BUYER_ID
            and  ac.STATUS = 'A'
          ) BUYER_NAME,
           
         (SELECT DISTINCT OHA.ATTRIBUTE11 
           FROM OE_ORDER_HEADERS_ALL OHA 
-         WHERE OHA.CUST_PO_NUMBER =  plv.SALESORDER_NO
-          AND   oha.HEADER_ID = plv.SALESORDER_ID
+         WHERE OHA.CUST_PO_NUMBER =  v1.SALESORDER_NO
+          AND   oha.HEADER_ID = v1.SALESORDER_ID
         ) DESCRIPTION,
          
         
         
-         plv.COUNTRY,
-         plv.DCPO,
+         v1.COUNTRY,
+         v1.DCPO,
          '' DELIVERY_NUMBER,  -- neede to be brought from packing list view  in header table  crrently unavailable
-         plv.TRANSPORTATION_MODE SHIP_MODE,
+         v1.TRANSPORTATION_MODE SHIP_MODE,
          
            (SELECT  MAX(ImpSaleContrLinesEO.SHIP_CANCEL_EX_BD_DATE)
          FROM    IEDOC_IMP_SALE_CONTR_LINES ImpSaleContrLinesEO
-         WHERE   ImpSaleContrLinesEO.BPO_NO = plv.SALESORDER_NO
-         AND     plv.STYLE_NUMBER = ImpSaleContrLinesEO.STYLE_NO) SHIP_CANCEL_EX_BD_DATE,
+         WHERE   ImpSaleContrLinesEO.BPO_NO = v1.SALESORDER_NO
+         AND     v1.STYLE_NUMBER = ImpSaleContrLinesEO.STYLE_NO) SHIP_CANCEL_EX_BD_DATE,
          
          
          (SELECT  MAX(ImpSaleContrLinesEO.SHIP_EX_FACTORY_DATE)
          FROM    IEDOC_IMP_SALE_CONTR_LINES ImpSaleContrLinesEO
-         WHERE   ImpSaleContrLinesEO.BPO_NO = plv.SALESORDER_NO
-         AND     plv.STYLE_NUMBER = ImpSaleContrLinesEO.STYLE_NO) SHIP_EX_FACTORY_DATE,
+         WHERE   ImpSaleContrLinesEO.BPO_NO = v1.SALESORDER_NO
+         AND     v1.STYLE_NUMBER = ImpSaleContrLinesEO.STYLE_NO) SHIP_EX_FACTORY_DATE,
          
           (SELECT headers.INVOICE_NO
             FROM IEDOC_EXP_CI_LINES lines,
                  IEDOC_EXP_CI_HEADERS headers
-            WHERE lines.PACK_LIST_NO = plv.PCK_LST_NO
+            WHERE lines.PACK_LIST_NO = v1.PCK_LST_NO
             AND lines.EXP_CI_HEADER_ID = headers.EXP_CI_HEADER_ID
             AND headers.VERSION_NO = ( SELECT MAX(h.VERSION_NO)
                                        FROM  IEDOC_EXP_CI_HEADERS h
@@ -104,8 +104,72 @@
          TOTAL_QTY  PACKED_PCS_QTY,
           TOTAL_CARTON_QTY PACKED_CARTON_QTY,
           TOTAL_CBM CBM_TOTAL
-   from PACKING_LIST_VIEW plv 
-            where  plv.creation_date >= sysdate-180
+      from PACKING_LIST_VIEW v1
+            where  v1.creation_date >= sysdate-180
+            
+            union
+            
+            
+            select v2.org DIVISION_ID ,
+        v2.PCK_LST_NO  PACK_LIST,
+        
+        v2.BUYER_ID CUST_ID ,
+         v2.STYLE,
+         v2.STYLE STYLE_NUMBER ,
+         v2.SEASON,
+         v2.BPO BPO_NUMBER,
+
+        (select customer_name
+          from ar_customers ac
+          where ac.CUSTOMER_ID = v2.BUYER_ID
+           and  ac.STATUS = 'A'
+         ) BUYER_NAME,
+       
+        (SELECT DISTINCT l.FABRIC_DESC || ' ' || h.END_USER || ' '||h.ITEM_DESCRIPTION
+          FROM   xx_om_poc_h_t  h,  xx_om_poc_l_t  l,   xx_om_bpo_info_t    bpo
+         WHERE h.poc_id = l.poc_id
+         and l.FOB_ID = bpo.FOB_ID
+         and bpo.bpo_id =  v2.bpo_id
+
+        ) DESCRIPTION,
+
+        
+         v2.COUNTRY,
+         v2.DCPO,
+         '' DELIVERY_NUMBER,  -- neede to be brought from packing list view  in header table  crrently unavailable
+         v2.TRANSPORTATION_MODE SHIP_MODE,
+         
+           (SELECT  MAX(ImpSaleContrLinesEO.SHIP_CANCEL_EX_BD_DATE)
+         FROM    XX_COM_SALES_CONTRACT_L_T ImpSaleContrLinesEO
+         WHERE   1=1
+         AND     v2.bpo_ID = ImpSaleContrLinesEO.bpo_id
+         ) SHIP_CANCEL_EX_BD_DATE,
+         
+         
+         (SELECT  MAX(ImpSaleContrLinesEO.SHIP_EX_FACTORY_DATE)
+         FROM    XX_COM_SALES_CONTRACT_L_T ImpSaleContrLinesEO
+         WHERE   1=1
+         AND     v2.bpo_ID = ImpSaleContrLinesEO.bpo_id
+         ) SHIP_EX_FACTORY_DATE,
+         
+          (SELECT headers.INVOICE_NO
+            FROM IEDOC_EXP_CI_LINES lines,
+                 IEDOC_EXP_CI_HEADERS headers
+            WHERE lines.PACK_LIST_NO = v2.PCK_LST_NO
+            AND lines.EXP_CI_HEADER_ID = headers.EXP_CI_HEADER_ID
+            AND headers.VERSION_NO = ( SELECT MAX(h.VERSION_NO)
+                                       FROM  IEDOC_EXP_CI_HEADERS h
+                                       WHERE H.INVOICE_NO = headers.INVOICE_NO
+                                     )
+            AND ROWNUM = 1                         
+         ) INVOICE_NO,
+         
+          
+         TOTAL_QTY  PACKED_PCS_QTY,
+          TOTAL_CARTON_QTY PACKED_CARTON_QTY,
+          TOTAL_CBM CBM_TOTAL
+   from PACKING_LIST_VIEW_V2 v2 
+            where  v2.creation_date >= sysdate-180
          ) H  ,
          
          
