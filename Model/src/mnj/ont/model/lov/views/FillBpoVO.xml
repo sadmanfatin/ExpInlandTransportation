@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="FillBpoVO"
+  Version="11.1.1.62.29"
+  InheritPersonalization="true"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  RowClass="mnj.ont.model.lov.views.FillBpoVORowImpl"
+  ComponentClass="mnj.ont.model.lov.views.FillBpoVOImpl"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="mnj.ont.model.lov.views.FillBpoVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <SQLQuery>
+    <![CDATA[SELECT H.DIVISION_ID  , H.PACK_LIST   ,h.CUST_ID , h.STYLE ,h.STYLE_NUMBER ,
+
+  NVL((SELECT DECODE(StyleLineEO.TRACK_BASIS,'Style Name',StyleLineEO.STYLE_NAME,'Style Number',StyleLineEO.STYLE_NUMBER)
+       FROM PWC_MFG_BSS_STYLE_L StyleLineEO,
+            pwc_mfg_bss_buyer_h pwcmfgbssbuyerh       
+       WHERE StyleLineEO.STYLE_IDENTIFIER = h.STYLE_NUMBER
+       AND   pwcmfgbssbuyerh.BUYER_ID = h.CUST_ID
+       --AND   pwcmfgbssbuyerh.ORG_ID = HeaderEO.ORG_ID 
+       AND   StyleLineEO.HEADER_ID = pwcmfgbssbuyerh.HEADER_ID
+       AND   rownum = 1),h.STYLE_NUMBER) CURRENT_STYLE, 
+
+       H.SEASON , H.BPO_NUMBER,H.BUYER_NAME,H.DESCRIPTION,H.country, H.DCPO,
+       H.DELIVERY_NUMBER, H.Ship_mode,H.SHIP_CANCEL_EX_BD_DATE,H.SHIP_EX_FACTORY_DATE,
+       H.INVOICE_NO, H.PACKED_PCS_QTY,H.PACKED_CARTON_QTY,H.CBM_TOTAL, 
+      INLAND.ASSIGNED_PCS, INLAND.ASSIGNED_CARTON, INLAND.ASSIGNED_CBM,
+      
+     NVL (( H.PACKED_PCS_QTY- INLAND.ASSIGNED_PCS ) ,H.PACKED_PCS_QTY) BALANCE_PCS_QTY,
+      NVL(( H.PACKED_CARTON_QTY- INLAND.ASSIGNED_CARTON ) ,H.PACKED_CARTON_QTY ) BALANCE_CARTON_QTY ,
+      NVL(( H.CBM_TOTAL- INLAND.ASSIGNED_CBM ) ,H.PACKED_CARTON_QTY ) BALANCE_CBM
+                                                                  
+      
+       
+       FROM 
+
+    (  select plv.org DIVISION_ID ,
+        plv.PCK_LST_NO  PACK_LIST,
+        
+        plv.BUYER_ID CUST_ID ,
+        plv.STYLE_NAME STYLE,
+         plv.STYLE_NUMBER ,
+         plv.SEASON,
+         plv.SALESORDER_NO BPO_NUMBER,
+         
+         
+        (select customer_name
+          from ar_customers ac
+          where ac.CUSTOMER_ID = plv.BUYER_ID
+           and  ac.STATUS = 'A'
+         ) BUYER_NAME,
+          
+        (SELECT DISTINCT OHA.ATTRIBUTE11 
+          FROM OE_ORDER_HEADERS_ALL OHA 
+         WHERE OHA.CUST_PO_NUMBER =  plv.SALESORDER_NO
+          AND   oha.HEADER_ID = plv.SALESORDER_ID
+        ) DESCRIPTION,
+         
+        
+        
+         plv.COUNTRY,
+         plv.DCPO,
+         '' DELIVERY_NUMBER,  -- neede to be brought from packing list view  in header table  crrently unavailable
+         plv.TRANSPORTATION_MODE SHIP_MODE,
+         
+           (SELECT  MAX(ImpSaleContrLinesEO.SHIP_CANCEL_EX_BD_DATE)
+         FROM    IEDOC_IMP_SALE_CONTR_LINES ImpSaleContrLinesEO
+         WHERE   ImpSaleContrLinesEO.BPO_NO = plv.SALESORDER_NO
+         AND     plv.STYLE_NUMBER = ImpSaleContrLinesEO.STYLE_NO) SHIP_CANCEL_EX_BD_DATE,
+         
+         
+         (SELECT  MAX(ImpSaleContrLinesEO.SHIP_EX_FACTORY_DATE)
+         FROM    IEDOC_IMP_SALE_CONTR_LINES ImpSaleContrLinesEO
+         WHERE   ImpSaleContrLinesEO.BPO_NO = plv.SALESORDER_NO
+         AND     plv.STYLE_NUMBER = ImpSaleContrLinesEO.STYLE_NO) SHIP_EX_FACTORY_DATE,
+         
+          (SELECT headers.INVOICE_NO
+            FROM IEDOC_EXP_CI_LINES lines,
+                 IEDOC_EXP_CI_HEADERS headers
+            WHERE lines.PACK_LIST_NO = plv.PCK_LST_NO
+            AND lines.EXP_CI_HEADER_ID = headers.EXP_CI_HEADER_ID
+            AND headers.VERSION_NO = ( SELECT MAX(h.VERSION_NO)
+                                       FROM  IEDOC_EXP_CI_HEADERS h
+                                       WHERE H.INVOICE_NO = headers.INVOICE_NO
+                                     )
+            AND ROWNUM = 1                         
+         ) INVOICE_NO,
+         
+          
+         TOTAL_QTY  PACKED_PCS_QTY,
+          TOTAL_CARTON_QTY PACKED_CARTON_QTY,
+          TOTAL_CBM CBM_TOTAL
+   from PACKING_LIST_VIEW plv 
+            where  plv.creation_date >= sysdate-180
+         ) H  ,
+         
+         
+       (
+        SELECT 
+        H.ORG_ID , 
+        L.PACK_LIST , 
+        L.STYLE_NO ,  
+        L.STYLE   , 
+        L.ORDER_BPO , 
+        L.ATTRIBUTE5 COUNTRY , 
+        L.DCPO_NO ,
+        L.ATTRIBUTE8 SHIP_MODE , 
+        
+       sum(L.CARTON_ASSIGN)  ASSIGNED_CARTON   ,
+       sum(L.ASSIGNED_PCS)  ASSIGNED_PCS    ,
+       sum(L.ASSIGN_CBM)  ASSIGNED_CBM  
+           
+         FROM IEDOC_EXP_INLAND_TRAN_HEADERS H ,
+         IEDOC_EXP_INLAND_TRAN_LINES L 
+         WHERE H.INLAND_TRANS_HEADER_ID = L.INLAND_TRANS_HEADER_ID
+      --  AND PACK_LIST  =4318
+         GROUP BY H.INLAND_TRANS_HEADER_ID ,
+        H.ORG_ID ,
+        L.PACK_LIST , 
+        L.STYLE_NO ,  
+        L.STYLE   , 
+        L.ORDER_BPO , 
+        L.ATTRIBUTE5  , 
+        L.DCPO_NO ,
+        L.ATTRIBUTE8   
+                
+       )  INLAND     
+        WHERE  1=1
+      AND  H.DIVISION_ID = INLAND.ORG_ID(+)
+      AND   H.PACK_LIST = INLAND.PACK_LIST (+)
+      AND   H.STYLE = INLAND.STYLE (+)
+      AND   H.STYLE_NUMBER = INLAND.STYLE_NO(+)
+      AND    H.BPO_NUMBER  = INLAND.ORDER_BPO(+)
+      AND  H.COUNTRY  = INLAND.COUNTRY(+)
+       AND  H.DCPO = INLAND.DCPO_NO(+)
+       AND  H.SHIP_MODE =  INLAND.SHIP_MODE(+)]]>
+  </SQLQuery>
+  <ViewAttribute
+    Name="DivisionId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="6"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DIVISION_ID"
+    Expression="DIVISION_ID"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="6"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="PackList"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="15"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="PACK_LIST"
+    Expression="PACK_LIST"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CustId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="CUST_ID"
+    Expression="CUST_ID"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Style"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="250"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="STYLE"
+    Expression="STYLE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="250"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="StyleNumber"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="250"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="STYLE_NUMBER"
+    Expression="STYLE_NUMBER"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="250"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CurrentStyle"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="250"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="CURRENT_STYLE"
+    Expression="CURRENT_STYLE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="250"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Season"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="SEASON"
+    Expression="SEASON"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="255"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="BpoNumber"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="BPO_NUMBER"
+    Expression="BPO_NUMBER"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="255"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="BuyerName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="50"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="BUYER_NAME"
+    Expression="BUYER_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="50"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Description"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="240"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DESCRIPTION"
+    Expression="DESCRIPTION"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="240"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Country"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="COUNTRY"
+    Expression="COUNTRY"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="255"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Dcpo"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="250"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DCPO"
+    Expression="DCPO"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="250"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DeliveryNumber"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DELIVERY_NUMBER"
+    Expression="DELIVERY_NUMBER"
+    SQLType="VARCHAR"/>
+  <ViewAttribute
+    Name="ShipMode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="SHIP_MODE"
+    Expression="SHIP_MODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="255"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ShipCancelExBdDate"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="SHIP_CANCEL_EX_BD_DATE"
+    Expression="SHIP_CANCEL_EX_BD_DATE"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ShipExFactoryDate"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="SHIP_EX_FACTORY_DATE"
+    Expression="SHIP_EX_FACTORY_DATE"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="InvoiceNo"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="250"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="INVOICE_NO"
+    Expression="INVOICE_NO"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="250"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="PackedPcsQty"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="PACKED_PCS_QTY"
+    Expression="PACKED_PCS_QTY"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="PackedCartonQty"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="PACKED_CARTON_QTY"
+    Expression="PACKED_CARTON_QTY"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CbmTotal"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="CBM_TOTAL"
+    Expression="CBM_TOTAL"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="AssignedPcs"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="ASSIGNED_PCS"
+    Expression="ASSIGNED_PCS"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="AssignedCarton"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="ASSIGNED_CARTON"
+    Expression="ASSIGNED_CARTON"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="AssignedCbm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="ASSIGNED_CBM"
+    Expression="ASSIGNED_CBM"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="BalancePcsQty"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="BALANCE_PCS_QTY"
+    Expression="BALANCE_PCS_QTY"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="BalanceCartonQty"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="BALANCE_CARTON_QTY"
+    Expression="BALANCE_CARTON_QTY"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="BalanceCbm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="BALANCE_CBM"
+    Expression="BALANCE_CBM"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="TotalCbm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="TOTAL_CBM"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="FlagNew"
+    IsSelected="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="VIEW_ATTR"
+    SQLType="VARCHAR"/>
+  <ViewCriteria
+    Name="FillBpoVOCriteria"
+    ViewObjectName="mnj.ont.model.lov.views.FillBpoVO"
+    Conjunction="AND">
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="displayOperators"
+          Value="InAdvancedMode"/>
+        <Property
+          Name="autoExecute"
+          Value="false"/>
+        <Property
+          Name="allowConjunctionOverride"
+          Value="true"/>
+        <Property
+          Name="showInList"
+          Value="true"/>
+        <Property
+          Name="mode"
+          Value="Basic"/>
+      </CustomProperties>
+    </Properties>
+    <ViewCriteriaRow
+      Name="vcrow2"
+      UpperColumns="1">
+      <ViewCriteriaItem
+        Name="PackList"
+        ViewAttribute="PackList"
+        Operator="="
+        Conjunction="AND"
+        Required="Optional"/>
+      <ViewCriteriaItem
+        Name="BpoNumber"
+        ViewAttribute="BpoNumber"
+        Operator="CONTAINS"
+        Conjunction="AND"
+        Required="Optional"/>
+      <ViewCriteriaItem
+        Name="InvoiceNo"
+        ViewAttribute="InvoiceNo"
+        Operator="="
+        Conjunction="AND"
+        Required="Optional"/>
+    </ViewCriteriaRow>
+  </ViewCriteria>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="model.ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

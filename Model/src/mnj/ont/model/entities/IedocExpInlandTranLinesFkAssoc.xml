@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE Association SYSTEM "jbo_03_01.dtd">
+<!---->
+<Association
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="IedocExpInlandTranLinesFkAssoc"
+  Version="11.1.1.62.29"
+  InheritPersonalization="true">
+  <DesignTime>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <AssociationEnd
+    Name="InlandTransportHeaderEO"
+    Cardinality="1"
+    Source="true"
+    Owner="mnj.ont.model.entities.InlandTransportHeaderEO">
+    <DesignTime>
+      <Attr Name="_aggregation" Value="0"/>
+      <Attr Name="_finderName" Value="InlandTransportHeaderEO"/>
+      <Attr Name="_foreignKey"
+        Value="mnj.ont.model.entities.InlandTransportHeaderEO.IedocExpInlandTranHeadPk"/>
+      <Attr Name="_isUpdateable" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item
+        Value="mnj.ont.model.entities.InlandTransportHeaderEO.InlandTransHeaderId"/>
+    </AttrArray>
+  </AssociationEnd>
+  <AssociationEnd
+    Name="InlandTransportLinesEO"
+    Cardinality="-1"
+    Owner="mnj.ont.model.entities.InlandTransportLinesEO">
+    <DesignTime>
+      <Attr Name="_aggregation" Value="0"/>
+      <Attr Name="_finderName" Value="InlandTransportLinesEO"/>
+      <Attr Name="_foreignKey"
+        Value="mnj.ont.model.entities.InlandTransportLinesEO.IedocExpInlandTranLinesFk"/>
+      <Attr Name="_isUpdateable" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item
+        Value="mnj.ont.model.entities.InlandTransportLinesEO.InlandTransHeaderId"/>
+    </AttrArray>
+  </AssociationEnd>
+</Association>

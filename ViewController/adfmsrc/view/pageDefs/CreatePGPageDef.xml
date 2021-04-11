@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.62.29" id="CreatePGPageDef"
+                Package="view.pageDefs">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="InlandTransportHeaderVO1" RangeSize="25"
+              DataControl="MainAMDataControl"
+              id="InlandTransportHeaderVO1Iterator"/>
+    <iterator Binds="InlandTransportLinesVO1" RangeSize="100"
+              DataControl="MainAMDataControl"
+              id="InlandTransportLinesVO1Iterator"/>
+    <searchRegion Binds="InlandTransportLinesVO1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InlandTransportLinesVO1Query"/>
+    <iterator Binds="FillBpoVO1" RangeSize="25" DataControl="MainAMDataControl"
+              id="FillBpoVO1Iterator"/>
+    <searchRegion Binds="FillBpoVO1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="FillBpoVO1Query"/>
+    <iterator Binds="CommercalTabVO1" RangeSize="25"
+              DataControl="MainAMDataControl" id="CommercalTabVO1Iterator"/>
+    <searchRegion Binds="CommercalTabVO1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="CommercalTabVO1Query"/>
+  </executables>
+  <bindings>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="TransportationCompanyName">
+      <AttrNames>
+        <Item Value="TransportationCompanyName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="VehicleNumber">
+      <AttrNames>
+        <Item Value="VehicleNumber"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="DriverName">
+      <AttrNames>
+        <Item Value="DriverName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="DriverMobileNumber">
+      <AttrNames>
+        <Item Value="DriverMobileNumber"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="DriverLicenseNumber">
+      <AttrNames>
+        <Item Value="DriverLicenseNumber"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="EscortName">
+      <AttrNames>
+        <Item Value="EscortName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="EscortMobileNumber">
+      <AttrNames>
+        <Item Value="EscortMobileNumber"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator" id="OrgId">
+      <AttrNames>
+        <Item Value="OrgId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="LockNumber">
+      <AttrNames>
+        <Item Value="LockNumber"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="Remarks">
+      <AttrNames>
+        <Item Value="Remarks"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="InlandTransportLinesVO1Iterator"
+          id="InlandTransportLinesVO1">
+      <nodeDefinition DefName="mnj.ont.model.views.InlandTransportLinesVO"
+                      Name="InlandTransportLinesVO10">
+        <AttrNames>
+          <Item Value="InlandTransLinesId"/>
+          <Item Value="InlandTransHeaderId"/>
+          <Item Value="Style"/>
+          <Item Value="OrderBpo"/>
+          <Item Value="DcpoNo"/>
+          <Item Value="ItemId"/>
+          <Item Value="CartonQuantity"/>
+          <Item Value="CartonAssign"/>
+          <Item Value="CfsName"/>
+          <Item Value="CfName"/>
+          <Item Value="ForwardErName"/>
+          <Item Value="InvoiceNo"/>
+          <Item Value="LastUpdateLogin"/>
+          <Item Value="LastUpdateDate"/>
+          <Item Value="LastUpdatedBy"/>
+          <Item Value="CreationDate"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="Attribute1"/>
+          <Item Value="Attribute2"/>
+          <Item Value="Attribute3"/>
+          <Item Value="Attribute4"/>
+          <Item Value="Attribute5"/>
+          <Item Value="Attribute6"/>
+          <Item Value="Attribute7"/>
+          <Item Value="Attribute8"/>
+          <Item Value="Attribute9"/>
+          <Item Value="Attribute10"/>
+          <Item Value="Attribute11"/>
+          <Item Value="Attribute12"/>
+          <Item Value="Attribute13"/>
+          <Item Value="Attribute14"/>
+          <Item Value="Attribute15"/>
+          <Item Value="Attribute16"/>
+          <Item Value="Attribute17"/>
+          <Item Value="Attribute18"/>
+          <Item Value="Attribute19"/>
+          <Item Value="Attribute20"/>
+          <Item Value="AttributeNum1"/>
+          <Item Value="AttributeNum2"/>
+          <Item Value="AttributeNum3"/>
+          <Item Value="AttributeNum4"/>
+          <Item Value="AttributeNum5"/>
+          <Item Value="AttributeNum6"/>
+          <Item Value="AttributeNum7"/>
+          <Item Value="AttributeNum8"/>
+          <Item Value="AttributeNum9"/>
+          <Item Value="AttributeNum10"/>
+          <Item Value="AttributeDate1"/>
+          <Item Value="AttributeDate2"/>
+          <Item Value="AttributeDate3"/>
+          <Item Value="AttributeDate4"/>
+          <Item Value="AttributeDate5"/>
+          <Item Value="Balance"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="InlandTransportLinesVO1Iterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="InlandTransportLinesVO1Iterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="MainAMDataControl"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="MainAMDataControl"/>
+    <listOfValues StaticList="false"
+                  IterBinding="InlandTransportHeaderVO1Iterator"
+                  Uses="LOV_OrgName" id="OrgName"/>
+    <listOfValues StaticList="false"
+                  IterBinding="InlandTransportHeaderVO1Iterator"
+                  Uses="LOV_TransportationAgencyName"
+                  id="TransportationAgencyName"/>
+    <tree IterBinding="FillBpoVO1Iterator" id="FillBpoVO1">
+      <nodeDefinition DefName="mnj.ont.model.lov.views.FillBpoVO"
+                      Name="FillBpoVO10">
+        <AttrNames>
+          <Item Value="Style"/>
+          <Item Value="Season"/>
+          <Item Value="BpoNumber"/>
+          <Item Value="BuyerName"/>
+          <Item Value="Description"/>
+          <Item Value="FlagNew" Binds="FlagNew"/>
+          <Item Value="DeliveryNumber"/>
+           <Item Value="Country"/>
+           <Item Value="ShipCancelExBdDate"/>
+          <Item Value="ShipMode"/>
+          <Item Value="Dcpo"/>
+          <Item Value="ShipExFactoryDate"/>
+          <Item Value="TotalCbm"/>
+          <Item Value="CbmTotal"/>
+          <Item Value="InvoiceNo"/>
+          <Item Value="PackList"/>
+          <Item Value="BalanceCbm"/>
+          <Item Value="StyleNumber"/>
+          <Item Value="PackedPcsQty"/>
+          <Item Value="PackedCartonQty"/>
+          <Item Value="BalancePcsQty"/>
+          <Item Value="BalanceCartonQty"/>
+          <Item Value="CurrentStyle"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <button IterBinding="FillBpoVO1Iterator" id="FlagNew" DTSupportsMRU="false"
+            StaticList="true">
+      <AttrNames>
+        <Item Value="FlagNew"/>
+      </AttrNames>
+      <ValueList>
+        <Item Value="Y"/>
+        <Item Value="N"/>
+      </ValueList>
+    </button>
+    <methodAction id="FillBpoHeader"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="FillBpoHeader"
+                  IsViewObjectMethod="false"/>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="TotalBalance">
+      <AttrNames>
+        <Item Value="TotalBalance"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="AttributeNum10">
+      <AttrNames>
+        <Item Value="AttributeNum10"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="CommercalTabVO1Iterator" id="CommercalTabVO1">
+      <nodeDefinition DefName="mnj.ont.model.views.CommercalTabVO"
+                      Name="CommercalTabVO10">
+        <AttrNames>
+          <Item Value="InlandCommercialId"/>
+          <Item Value="Attribute1"/>
+          <Item Value="Attribute2"/>
+          <Item Value="Attribute3"/>
+          <Item Value="Attribute4"/>
+          <Item Value="Attribute5"/>
+          <Item Value="Attribute6"/>
+          <Item Value="Attribute7"/>
+          <Item Value="Attribute8"/>
+          <Item Value="Attribute9"/>
+          <Item Value="AttributeDate1"/>
+          <Item Value="AttributeDate2"/>
+          <Item Value="AttributeDate3"/>
+          <Item Value="AttributeDate4"/>
+          <Item Value="AttributeDate5"/>
+          <Item Value="AttributeNum1"/>
+          <Item Value="AttributeNum10"/>
+          <Item Value="AttributeNum2"/>
+          <Item Value="AttributeNum3"/>
+          <Item Value="AttributeNum4"/>
+          <Item Value="AttributeNum5"/>
+          <Item Value="AttributeNum6"/>
+          <Item Value="AttributeNum7"/>
+          <Item Value="AttributeNum8"/>
+          <Item Value="AttributeNum9"/>
+          <Item Value="CargoHandoverDate"/>
+          <Item Value="CargoUnloadingDate"/>
+          <Item Value="CfsName"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="CreationDate"/>
+          <Item Value="InlandTransHeaderId"/>
+          <Item Value="LastUpdateDate"/>
+          <Item Value="LastUpdatedBy"/>
+          <Item Value="LastUpdateLogin"/>
+          <Item Value="VehicleArrivalCfs"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="CommercalTabVO1Iterator" id="CreateInsert1"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="CommercalTabVO1Iterator" id="Delete1"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="InlandTransportLinesVO1Iterator"
+          id="InlandTransportLinesVO11">
+      <nodeDefinition DefName="mnj.ont.model.views.InlandTransportLinesVO"
+                      Name="InlandTransportLinesVO110">
+        <AttrNames>
+          <Item Value="Style"/>
+          <Item Value="OrderBpo"/>
+          <Item Value="DcpoNo"/>
+          <Item Value="Attribute1"/>
+          <Item Value="CartonQuantity"/>
+          <Item Value="CartonAssign"/>
+          <Item Value="Balance"/>
+          <Item Value="CfsName"/>
+          <Item Value="CfName"/>
+          <Item Value="ForwardErName"/>
+          <Item Value="InvoiceNo"/>
+          <Item Value="Attribute3"/>
+          <Item Value="Attribute4"/>
+          <Item Value="Attribute5"/>
+          <Item Value="Attribute6"/>
+          <Item Value="Attribute8"/>
+          <Item Value="orgIdTrans"/>
+          <Item Value="Attribute7"/>
+          <Item Value="TotalCbm"/>
+          <Item Value="AttributeNum9"/>
+          <Item Value="AssignedPcs"/>
+          <Item Value="BalancePcs"/>
+          <Item Value="AssignCbm"/>
+          <Item Value="PackList"/>
+          <Item Value="StyleNo"/>
+          <Item Value="CurrentStyle"/>
+          <Item Value="CurrentStyleNo"/>
+          <Item Value="SubContractOrgName" Binds="SubContractOrgName"/>
+          <Item Value="ShippablePcsQty"/>
+          <Item Value="ShippableCartonQty"/>
+          <Item Value="HeaderOrgId"/>
+          <Item Value="Attribute9"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="popupDeselectActionListener"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="popupDeselectActionListener"
+                  IsViewObjectMethod="false"/>
+    <methodAction id="populateTracking"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="populateTracking"
+                  IsViewObjectMethod="false">
+      <NamedData NDName="TrackingNum" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="getUnitName" InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="getUnitName"
+                  IsViewObjectMethod="false"/>
+    <methodAction id="cargoHandOverDateValidation"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="cargoHandOverDateValidation"
+                  IsViewObjectMethod="false"/>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="AttributeNum8">
+      <AttrNames>
+        <Item Value="AttributeNum8"/>
+      </AttrNames>
+    </attributeValues>
+    <methodAction id="saveBtnAction"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="saveBtnAction"
+                  IsViewObjectMethod="false"/>
+    <methodAction id="populateBalancePerPcs"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="populateBalancePerPcs"
+                  IsViewObjectMethod="false"/>
+    <listOfValues StaticList="false"
+                  IterBinding="InlandTransportHeaderVO1Iterator"
+                  Uses="LOV_TransportationCompanyName"
+                  id="TransportationCompanyName1"/>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="AttributeDate1">
+      <AttrNames>
+        <Item Value="AttributeDate1"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="VehicleArrivalDate">
+      <AttrNames>
+        <Item Value="VehicleArrivalDate"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="VehicleDepartureDate">
+      <AttrNames>
+        <Item Value="VehicleDepartureDate"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="ExFactoryDate">
+      <AttrNames>
+        <Item Value="ExFactoryDate"/>
+      </AttrNames>
+    </attributeValues>
+    <listOfValues StaticList="false"
+                  IterBinding="InlandTransportHeaderVO1Iterator"
+                  Uses="LOV_StatusMode" id="StatusMode"/>
+    <listOfValues StaticList="false"
+                  IterBinding="InlandTransportHeaderVO1Iterator"
+                  Uses="LOV_EscortId" id="EscortId"/>
+    <methodAction id="populateTrackingInfo"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="populateTrackingInfo"
+                  IsViewObjectMethod="false"/>
+    <list IterBinding="InlandTransportHeaderVO1Iterator" id="RcvFlag"
+          DTSupportsMRU="false" StaticList="true" NullValueFlag="start">
+      <AttrNames>
+        <Item Value="RcvFlag"/>
+      </AttrNames>
+      <ValueList>
+        <Item Value="NONE"/>
+        <Item Value="SEND"/>
+        <Item Value="RCVD"/>
+      </ValueList>
+    </list>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="InlandTransHeaderId">
+      <AttrNames>
+        <Item Value="InlandTransHeaderId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator" id="GumTap">
+      <AttrNames>
+        <Item Value="GumTap"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="EmptyCarton">
+      <AttrNames>
+        <Item Value="EmptyCarton"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="InlandTransportHeaderVO1Iterator"
+                     id="DepartureTime">
+      <AttrNames>
+        <Item Value="DepartureTime"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="InlandTransportLinesVO1Iterator" StaticList="false"
+          Uses="LOV_SubContractOrgName" id="SubContractOrgName"
+          DTSupportsMRU="true"/>
+  </bindings>
+</pageDefinition>

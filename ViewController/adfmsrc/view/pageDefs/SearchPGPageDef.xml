@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.62.29" id="SearchPGPageDef"
+                Package="view.pageDefs">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="InlandTransportHeaderVO1" RangeSize="25"
+              DataControl="MainAMDataControl"
+              id="InlandTransportHeaderVO1Iterator">
+      <sortCriteria>
+        <sort attribute="InlandTransHeaderId" ascending="false"/>
+      </sortCriteria>
+    </iterator>
+    <searchRegion Criteria="InlandTransportHeaderVOCriteria"
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  Binds="InlandTransportHeaderVO1Iterator"
+                  id="InlandTransportHeaderVOCriteriaQuery"/>
+    <invokeAction id="Action" Binds="setSessionValues" Refresh="always"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="InlandTransportHeaderVO1Iterator"
+          id="InlandTransportHeaderVO1">
+      <nodeDefinition DefName="mnj.ont.model.views.InlandTransportHeaderVO"
+                      Name="InlandTransportHeaderVO10">
+        <AttrNames>
+          <Item Value="TransportationAgencyName"/>
+          <Item Value="TransportationCompanyName"/>
+          <Item Value="VehicleNumber"/>
+          <Item Value="VehicleArrivalDate"/>
+          <Item Value="VehicleDepartureDate"/>
+          <Item Value="ExFactoryDate"/>
+          <Item Value="DriverName"/>
+          <Item Value="DriverMobileNumber"/>
+          <Item Value="DriverLicenseNumber"/>
+          <Item Value="EscortName"/>
+          <Item Value="EscortMobileNumber"/>
+          <Item Value="StatusMode"/>
+          <Item Value="OrgId"/>
+          <Item Value="LockNumber"/>
+          <Item Value="Remarks"/>
+          <Item Value="AttributeNum10"/>
+          <Item Value="OrgName"/>
+          <Item Value="InlandTransHeaderId"/>
+          <Item Value="PackList"/>
+          <Item Value="OrderBpo"/>
+          <Item Value="CfsName"/>
+          <Item Value="InvoiceNo"/>
+          <Item Value="ExFactoryDateOnly"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="InlandTransportHeaderVO1Iterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="InlandTransportHeaderVO1Iterator"
+            id="setCurrentRowWithKey" RequiresUpdateModel="false"
+            Action="setCurrentRowWithKey">
+      <NamedData NDName="rowKey" NDType="java.lang.String"/>
+    </action>
+    <methodAction id="setSessionValues"
+                  InstanceName="MainAMDataControl.dataProvider"
+                  DataControl="MainAMDataControl" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="setSessionValues"
+                  IsViewObjectMethod="false">
+      <NamedData NDName="orgId" NDValue="#{viewScope.OrgId}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="userId" NDValue="#{viewScope.UserId}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="respId" NDValue="#{viewScope.RespId}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="respAppl" NDValue="#{viewScope.RespApplId}"
+                 NDType="java.lang.String"/>
+    </methodAction>
+    <action IterBinding="InlandTransportHeaderVO1Iterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="MainAMDataControl"/>
+  </bindings>
+</pageDefinition>

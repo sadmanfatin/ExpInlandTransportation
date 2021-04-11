@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="InlandTransportLinesVO"
+  Version="11.1.1.62.29"
+  InheritPersonalization="true"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Full"
+  UseGlueCode="false"
+  ComponentClass="mnj.ont.model.views.InlandTransportLinesVOImpl">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Coll"/>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <ViewAccessor
+    Name="CFSNameVO1"
+    ViewObjectName="mnj.ont.model.lov.views.CFSNameVO">
+    <ParameterMap>
+      <PIMap Variable="P_BUYER_NAME">
+        <TransientExpression><![CDATA[Attribute7]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="P_DCPO">
+        <TransientExpression><![CDATA[DcpoNo]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="P_SHIPMENT_MODE">
+        <TransientExpression><![CDATA[Attribute8]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="P_COUNTRY">
+        <TransientExpression><![CDATA[Attribute5]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="CFNNsmrVO1"
+    ViewObjectName="mnj.ont.model.lov.views.CFNNsmrVO">
+    <ParameterMap>
+      <PIMap Variable="P_BUYER_NAME">
+        <TransientExpression><![CDATA[Attribute7]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="P_ORG_ID">
+        <TransientExpression><![CDATA[HeaderOrgId]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="ForworderNameVO1"
+    ViewObjectName="mnj.ont.model.lov.views.ForworderNameVO">
+    <ParameterMap>
+      <PIMap Variable="P_BUYER_NAME">
+        <TransientExpression><![CDATA[Attribute7]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="P_COUNTRY">
+        <TransientExpression><![CDATA[Attribute5]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="P_SHIPMENT_MODE">
+        <TransientExpression><![CDATA[Attribute8]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="P_DCPO">
+        <TransientExpression><![CDATA[DcpoNo]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="OrgVO1"
+    ViewObjectName="mnj.ont.model.lov.views.OrgVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="ShipmMode1"
+    ViewObjectName="mnj.ont.model.lov.views.ShipmMode"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_CfsName"
+    ListVOName="CFSNameVO1"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_CfsName_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CfsName"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="CfsName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CfName"
+    ListVOName="CFNNsmrVO1"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_CfName_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CfName"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="CfsName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_ForwardErName"
+    ListVOName="ForworderNameVO1"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ForwardErName"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="ForworderName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_SubContractOrgName"
+    ListVOName="OrgVO1"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="SubContractOrgName"/>
+    </AttrArray>
+    <AttrArray Name="DerivedAttrNames">
+      <Item Value="SubContractOrg"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="InternalAddressLine"/>
+      <Item Value="OrganizationId"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="InternalAddressLine"/>
+    </AttrArray>
+    <DisplayCriteria
+      Hint="showAndExecute"/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_Attribute8"
+    ListVOName="ShipmMode1"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Attribute8"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Description"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <SQLQuery>
+    <![CDATA[SELECT InlandTransportLinesEO.INLAND_TRANS_LINES_ID, 
+       InlandTransportLinesEO.INLAND_TRANS_HEADER_ID, 
+       InlandTransportLinesEO.STYLE, 
+        InlandTransportLinesEO.STYLE_NO,
+        InlandTransportLinesEO.CURRENT_STYLE_NO,
+        InlandTransportLinesEO.CURRENT_STYLE,
+       InlandTransportLinesEO.ORDER_BPO, 
+       InlandTransportLinesEO.DCPO_NO, 
+       InlandTransportLinesEO.ITEM_ID, 
+       InlandTransportLinesEO.CARTON_QUANTITY, 
+       InlandTransportLinesEO.CARTON_ASSIGN, 
+       InlandTransportLinesEO.CFS_NAME, 
+       InlandTransportLinesEO.CF_NAME, 
+       InlandTransportLinesEO.FORWARD_ER_NAME, 
+       InlandTransportLinesEO.INVOICE_NO, 
+       InlandTransportLinesEO.LAST_UPDATE_LOGIN, 
+       InlandTransportLinesEO.LAST_UPDATE_DATE, 
+       InlandTransportLinesEO.LAST_UPDATED_BY, 
+       InlandTransportLinesEO.CREATION_DATE, 
+       InlandTransportLinesEO.CREATED_BY, 
+       InlandTransportLinesEO.ATTRIBUTE1, 
+       InlandTransportLinesEO.ATTRIBUTE2, 
+       InlandTransportLinesEO.ATTRIBUTE3, 
+       InlandTransportLinesEO.ATTRIBUTE4, 
+       InlandTransportLinesEO.ATTRIBUTE5, 
+       InlandTransportLinesEO.ATTRIBUTE6, 
+       InlandTransportLinesEO.ATTRIBUTE7, 
+       InlandTransportLinesEO.ATTRIBUTE8, 
+       InlandTransportLinesEO.ATTRIBUTE9, 
+       InlandTransportLinesEO.ATTRIBUTE10, 
+       InlandTransportLinesEO.ATTRIBUTE11, 
+       InlandTransportLinesEO.ATTRIBUTE12, 
+       InlandTransportLinesEO.ATTRIBUTE13, 
+       InlandTransportLinesEO.ATTRIBUTE14, 
+       InlandTransportLinesEO.ATTRIBUTE15, 
+       InlandTransportLinesEO.ATTRIBUTE16, 
+       InlandTransportLinesEO.ATTRIBUTE17, 
+       InlandTransportLinesEO.ATTRIBUTE18, 
+       InlandTransportLinesEO.ATTRIBUTE19, 
+       InlandTransportLinesEO.ATTRIBUTE20, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM1, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM2, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM3, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM4, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM5, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM6, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM7, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM8, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM9, 
+       InlandTransportLinesEO.ATTRIBUTE_NUM10, 
+       InlandTransportLinesEO.ATTRIBUTE_DATE1, 
+       InlandTransportLinesEO.ATTRIBUTE_DATE2, 
+       InlandTransportLinesEO.ATTRIBUTE_DATE3, 
+       InlandTransportLinesEO.ATTRIBUTE_DATE4, 
+       InlandTransportLinesEO.ATTRIBUTE_DATE5,
+InlandTransportLinesEO.TOTAL_CBM,
+InlandTransportLinesEO.BALANCE_PCS,
+InlandTransportLinesEO.ASSIGNED_PCS,
+InlandTransportLinesEO.ASSIGN_CBM,
+InlandTransportLinesEO.PACK_LIST ,
+InlandTransportLinesEO.SUB_CONTRACT_ORG,
+InlandTransportLinesEO.PACKED_PCS_QTY ,
+InlandTransportLinesEO.PACKED_CARTON_QTY ,
+NVL( (InlandTransportLinesEO.PACKED_PCS_QTY -
+   (SELECT sum(L.ASSIGNED_PCS)     
+        FROM IEDOC_EXP_INLAND_TRAN_HEADERS H ,
+         IEDOC_EXP_INLAND_TRAN_LINES L 
+         WHERE H.INLAND_TRANS_HEADER_ID = L.INLAND_TRANS_HEADER_ID
+         and L.PACK_LIST = InlandTransportLinesEO.PACK_LIST
+         and L.STYLE = InlandTransportLinesEO.STYLE
+         and L.STYLE_NO = InlandTransportLinesEO.STYLE_NO
+         and L.ORDER_BPO  = InlandTransportLinesEO.ORDER_BPO
+         and L.ATTRIBUTE5 = InlandTransportLinesEO.ATTRIBUTE5
+         and L.DCPO_NO = InlandTransportLinesEO.DCPO_NO
+         and L.ATTRIBUTE8 = InlandTransportLinesEO.ATTRIBUTE8
+         -- GROUP BY  H.ORG_ID ,L.PACK_LIST ,  L.STYLE, L.STYLE_NO ,    L.ORDER_BPO ,  L.ATTRIBUTE5  , L.DCPO_NO ,  L.ATTRIBUTE8 
+          )  ),InlandTransportLinesEO.PACKED_PCS_QTY   )   SHIPPABLE_PCS_QTY ,
+          
+          
+          
+          
+NVL( (InlandTransportLinesEO.PACKED_CARTON_QTY -
+
+   (SELECT sum(L.CARTON_ASSIGN)     
+        FROM IEDOC_EXP_INLAND_TRAN_HEADERS H ,
+         IEDOC_EXP_INLAND_TRAN_LINES L 
+         WHERE H.INLAND_TRANS_HEADER_ID = L.INLAND_TRANS_HEADER_ID
+         and L.PACK_LIST = InlandTransportLinesEO.PACK_LIST
+         and L.STYLE = InlandTransportLinesEO.STYLE
+         and L.STYLE_NO = InlandTransportLinesEO.STYLE_NO
+         and L.ORDER_BPO  = InlandTransportLinesEO.ORDER_BPO
+         and L.ATTRIBUTE5 = InlandTransportLinesEO.ATTRIBUTE5
+         and L.DCPO_NO = InlandTransportLinesEO.DCPO_NO
+         and L.ATTRIBUTE8 = InlandTransportLinesEO.ATTRIBUTE8
+         -- GROUP BY  H.ORG_ID ,L.PACK_LIST ,  L.STYLE, L.STYLE_NO ,    L.ORDER_BPO ,  L.ATTRIBUTE5  , L.DCPO_NO ,  L.ATTRIBUTE8 
+          )  ),InlandTransportLinesEO.PACKED_CARTON_QTY   )   SHIPPABLE_CARTON_QTY ,
+
+
+(SELECT HOU.INTERNAL_ADDRESS_LINE
+        FROM HR_ORGANIZATION_UNITS HOU 
+        WHERE HOU.ORGANIZATION_ID = InlandTransportLinesEO.SUB_CONTRACT_ORG AND ROWNUM = 1) SUB_CONTRACT_ORG_NAME ,
+        
+        
+        (select org_id from 
+         IEDOC_EXP_INLAND_TRAN_HEADERS  h 
+         where InlandTransportLinesEO.INLAND_TRANS_HEADER_ID = h.INLAND_TRANS_HEADER_ID 
+          ) header_org_id
+        
+        
+FROM IEDOC_EXP_INLAND_TRAN_LINES InlandTransportLinesEO]]>
+  </SQLQuery>
+  <EntityUsage
+    Name="InlandTransportLinesEO"
+    Entity="mnj.ont.model.entities.InlandTransportLinesEO"/>
+  <ViewAttribute
+    Name="InlandTransLinesId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="InlandTransLinesId"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="INLAND_TRANS_LINES_ID"/>
+  <ViewAttribute
+    Name="InlandTransHeaderId"
+    PrecisionRule="true"
+    EntityAttrName="InlandTransHeaderId"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="INLAND_TRANS_HEADER_ID"/>
+  <ViewAttribute
+    Name="Style"
+    PrecisionRule="true"
+    EntityAttrName="Style"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="STYLE"/>
+  <ViewAttribute
+    Name="StyleNo"
+    PrecisionRule="true"
+    EntityAttrName="StyleNo"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="STYLE_NO"/>
+  <ViewAttribute
+    Name="CurrentStyleNo"
+    PrecisionRule="true"
+    EntityAttrName="CurrentStyleNo"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CURRENT_STYLE_NO"/>
+  <ViewAttribute
+    Name="CurrentStyle"
+    PrecisionRule="true"
+    EntityAttrName="CurrentStyle"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CURRENT_STYLE"/>
+  <ViewAttribute
+    Name="OrderBpo"
+    PrecisionRule="true"
+    EntityAttrName="OrderBpo"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ORDER_BPO"/>
+  <ViewAttribute
+    Name="DcpoNo"
+    PrecisionRule="true"
+    EntityAttrName="DcpoNo"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="DCPO_NO"/>
+  <ViewAttribute
+    Name="ItemId"
+    PrecisionRule="true"
+    EntityAttrName="ItemId"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ITEM_ID"/>
+  <ViewAttribute
+    Name="CartonQuantity"
+    PrecisionRule="true"
+    EntityAttrName="CartonQuantity"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CARTON_QUANTITY"/>
+  <ViewAttribute
+    Name="CartonAssign"
+    PrecisionRule="true"
+    EntityAttrName="CartonAssign"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CARTON_ASSIGN"
+    DefaultValue="0"/>
+  <ViewAttribute
+    Name="CfsName"
+    PrecisionRule="true"
+    EntityAttrName="CfsName"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CFS_NAME"
+    LOVName="LOV_CfsName">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CfName"
+    PrecisionRule="true"
+    EntityAttrName="CfName"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CF_NAME"
+    LOVName="LOV_CfName">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ForwardErName"
+    PrecisionRule="true"
+    EntityAttrName="ForwardErName"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="FORWARD_ER_NAME"
+    LOVName="LOV_ForwardErName">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="InvoiceNo"
+    PrecisionRule="true"
+    EntityAttrName="InvoiceNo"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="INVOICE_NO"/>
+  <ViewAttribute
+    Name="LastUpdateLogin"
+    PrecisionRule="true"
+    EntityAttrName="LastUpdateLogin"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="LAST_UPDATE_LOGIN"/>
+  <ViewAttribute
+    Name="LastUpdateDate"
+    PrecisionRule="true"
+    EntityAttrName="LastUpdateDate"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="LAST_UPDATE_DATE"/>
+  <ViewAttribute
+    Name="LastUpdatedBy"
+    PrecisionRule="true"
+    EntityAttrName="LastUpdatedBy"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="LAST_UPDATED_BY"/>
+  <ViewAttribute
+    Name="CreationDate"
+    PrecisionRule="true"
+    EntityAttrName="CreationDate"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CREATION_DATE"/>
+  <ViewAttribute
+    Name="CreatedBy"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="CREATED_BY"/>
+  <ViewAttribute
+    Name="Attribute1"
+    PrecisionRule="true"
+    EntityAttrName="Attribute1"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE1"/>
+  <ViewAttribute
+    Name="Attribute2"
+    PrecisionRule="true"
+    EntityAttrName="Attribute2"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE2">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYWIDTH
+          Value="30"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Attribute3"
+    PrecisionRule="true"
+    EntityAttrName="Attribute3"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE3"/>
+  <ViewAttribute
+    Name="Attribute4"
+    PrecisionRule="true"
+    EntityAttrName="Attribute4"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE4"/>
+  <ViewAttribute
+    Name="Attribute5"
+    PrecisionRule="true"
+    EntityAttrName="Attribute5"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE5"/>
+  <ViewAttribute
+    Name="Attribute6"
+    PrecisionRule="true"
+    EntityAttrName="Attribute6"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE6"/>
+  <ViewAttribute
+    Name="Attribute7"
+    PrecisionRule="true"
+    EntityAttrName="Attribute7"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE7"/>
+  <ViewAttribute
+    Name="Attribute8"
+    PrecisionRule="true"
+    EntityAttrName="Attribute8"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE8"
+    LOVName="LOV_Attribute8">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Attribute9"
+    PrecisionRule="true"
+    EntityAttrName="Attribute9"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE9"/>
+  <ViewAttribute
+    Name="Attribute10"
+    PrecisionRule="true"
+    EntityAttrName="Attribute10"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE10"/>
+  <ViewAttribute
+    Name="Attribute11"
+    PrecisionRule="true"
+    EntityAttrName="Attribute11"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE11"/>
+  <ViewAttribute
+    Name="Attribute12"
+    PrecisionRule="true"
+    EntityAttrName="Attribute12"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE12"/>
+  <ViewAttribute
+    Name="Attribute13"
+    PrecisionRule="true"
+    EntityAttrName="Attribute13"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE13"/>
+  <ViewAttribute
+    Name="Attribute14"
+    PrecisionRule="true"
+    EntityAttrName="Attribute14"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE14"/>
+  <ViewAttribute
+    Name="Attribute15"
+    PrecisionRule="true"
+    EntityAttrName="Attribute15"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE15"/>
+  <ViewAttribute
+    Name="Attribute16"
+    PrecisionRule="true"
+    EntityAttrName="Attribute16"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE16"/>
+  <ViewAttribute
+    Name="Attribute17"
+    PrecisionRule="true"
+    EntityAttrName="Attribute17"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE17"/>
+  <ViewAttribute
+    Name="Attribute18"
+    PrecisionRule="true"
+    EntityAttrName="Attribute18"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE18"/>
+  <ViewAttribute
+    Name="Attribute19"
+    PrecisionRule="true"
+    EntityAttrName="Attribute19"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE19"/>
+  <ViewAttribute
+    Name="Attribute20"
+    PrecisionRule="true"
+    EntityAttrName="Attribute20"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE20"/>
+  <ViewAttribute
+    Name="AttributeNum1"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum1"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM1">
+    <Properties>
+      <SchemaBasedProperties>
+        <AUTOSUBMIT
+          Value="true"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="AttributeNum2"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum2"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM2">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYWIDTH
+          Value="30"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="AttributeNum3"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum3"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM3"/>
+  <ViewAttribute
+    Name="AttributeNum4"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum4"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM4"/>
+  <ViewAttribute
+    Name="AttributeNum5"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum5"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM5"/>
+  <ViewAttribute
+    Name="AttributeNum6"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum6"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM6"/>
+  <ViewAttribute
+    Name="AttributeNum7"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum7"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM7"/>
+  <ViewAttribute
+    Name="AttributeNum8"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum8"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM8"/>
+  <ViewAttribute
+    Name="AttributeNum9"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum9"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM9"/>
+  <ViewAttribute
+    Name="AttributeNum10"
+    PrecisionRule="true"
+    EntityAttrName="AttributeNum10"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_NUM10"/>
+  <ViewAttribute
+    Name="AttributeDate1"
+    PrecisionRule="true"
+    EntityAttrName="AttributeDate1"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_DATE1"/>
+  <ViewAttribute
+    Name="AttributeDate2"
+    PrecisionRule="true"
+    EntityAttrName="AttributeDate2"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_DATE2"/>
+  <ViewAttribute
+    Name="AttributeDate3"
+    PrecisionRule="true"
+    EntityAttrName="AttributeDate3"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_DATE3"/>
+  <ViewAttribute
+    Name="AttributeDate4"
+    PrecisionRule="true"
+    EntityAttrName="AttributeDate4"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_DATE4"/>
+  <ViewAttribute
+    Name="AttributeDate5"
+    PrecisionRule="true"
+    EntityAttrName="AttributeDate5"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ATTRIBUTE_DATE5"/>
+  <ViewAttribute
+    Name="TotalCbm"
+    PrecisionRule="true"
+    EntityAttrName="TotalCbm"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="TOTAL_CBM"/>
+  <ViewAttribute
+    Name="BalancePcs"
+    PrecisionRule="true"
+    EntityAttrName="BalancePcs"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="BALANCE_PCS"/>
+  <ViewAttribute
+    Name="AssignedPcs"
+    PrecisionRule="true"
+    EntityAttrName="AssignedPcs"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="ASSIGNED_PCS"/>
+  <ViewAttribute
+    Name="AssignCbm"
+    PrecisionRule="true"
+    AliasName="ASSIGN_CBM"
+    EntityAttrName="AssignCbm"
+    EntityUsage="InlandTransportLinesEO"/>
+  <ViewAttribute
+    Name="PackList"
+    PrecisionRule="true"
+    EntityAttrName="PackList"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="PACK_LIST"/>
+  <ViewAttribute
+    Name="SubContractOrg"
+    PrecisionRule="true"
+    EntityAttrName="SubContractOrg"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="SUB_CONTRACT_ORG"/>
+  <ViewAttribute
+    Name="PackedPcsQty"
+    PrecisionRule="true"
+    EntityAttrName="PackedPcsQty"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="PACKED_PCS_QTY"/>
+  <ViewAttribute
+    Name="PackedCartonQty"
+    PrecisionRule="true"
+    EntityAttrName="PackedCartonQty"
+    EntityUsage="InlandTransportLinesEO"
+    AliasName="PACKED_CARTON_QTY"/>
+  <ViewAttribute
+    Name="ShippablePcsQty"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="SHIPPABLE_PCS_QTY"
+    Expression="SHIPPABLE_PCS_QTY"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ShippableCartonQty"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="SHIPPABLE_CARTON_QTY"
+    Expression="SHIPPABLE_CARTON_QTY"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="SubContractOrgName"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="80"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="SUB_CONTRACT_ORG_NAME"
+    Expression="SUB_CONTRACT_ORG_NAME"
+    SQLType="VARCHAR"
+    LOVName="LOV_SubContractOrgName">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="80"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYWIDTH
+          Value="30"/>
+        <CONTROLTYPE
+          Value="input_text_lov"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="HeaderOrgId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="HEADER_ORG_ID"
+    Expression="HEADER_ORG_ID"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Balance"
+    IsSelected="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="VIEW_ATTR"
+    SQLType="VARCHAR">
+    <TransientExpression><![CDATA[(CartonQuantity==null?0:CartonQuantity) - (CartonAssign==null?0:CartonAssign)]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <AUTOSUBMIT
+          Value="true"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="orgIdTrans"
+    IsSelected="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="VIEW_ATTR"
+    SQLType="VARCHAR"/>
+  <ViewLinkAccessor
+    Name="BalancePcsVO"
+    ViewLink="mnj.ont.model.views.LinesBalanceVO"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="AssignCBMVO"
+    ViewLink="mnj.ont.model.views.LinesAssignCBMVL"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="PreviousAssignCartonVO"
+    ViewLink="mnj.ont.model.lov.views.LinesPreAssignCartonVL"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+</ViewObject>
