@@ -841,7 +841,7 @@
                 </af:column>
                 <af:column sortProperty="CfsName" filterable="true"
                            sortable="true" headerText="CFS Name" id="c16"
-                           align="center" width="70">
+                           align="center" width="130">
                   <af:inputText value="#{row.bindings.CfsName.inputValue}"
                                 label="#{bindings.InlandTransportLinesVO11.hints.CfsName.label}"
                                 required="#{bindings.InlandTransportLinesVO11.hints.CfsName.mandatory}"
@@ -864,7 +864,7 @@
                 </af:column>
                 <af:column sortProperty="CfName" filterable="true"
                            sortable="true" headerText="C&amp;F Name" id="c23"
-                           align="center" width="70">
+                           align="center" width="130">
                   <af:inputText value="#{row.bindings.CfName.inputValue}"
                                 label="#{bindings.InlandTransportLinesVO11.hints.CfName.label}"
                                 required="#{bindings.InlandTransportLinesVO11.hints.CfName.mandatory}"
@@ -886,7 +886,7 @@
                 </af:column>
                 <af:column sortProperty="ForwardErName" filterable="true"
                            sortable="true" headerText="Forworder Name" id="c18"
-                           align="center" width="70">
+                           align="center" width="130">
                   <af:inputText value="#{row.bindings.ForwardErName.inputValue}"
                                 label="#{bindings.InlandTransportLinesVO11.hints.ForwardErName.label}"
                                 required="#{bindings.InlandTransportLinesVO11.hints.ForwardErName.mandatory}"

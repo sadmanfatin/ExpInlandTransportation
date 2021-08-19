@@ -71,9 +71,21 @@
     Name="ShipmMode1"
     ViewObjectName="mnj.ont.model.lov.views.ShipmMode"
     RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="CFSNameNewVO1"
+    ViewObjectName="mnj.ont.model.lov.views.CFSNameNewVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="CNFNameNewVO1"
+    ViewObjectName="mnj.ont.model.lov.views.CNFNameNewVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="ForwarderNameNewVO1"
+    ViewObjectName="mnj.ont.model.lov.views.ForwarderNameNewVO"
+    RowLevelBinds="true"/>
   <ListBinding
     Name="LOV_CfsName"
-    ListVOName="CFSNameVO1"
+    ListVOName="CFSNameNewVO1"
     ListRangeSize="-1"
     NullValueFlag="none"
     NullValueId="LOV_CfsName_LOVUIHints_NullValueId"
@@ -84,11 +96,14 @@
     <AttrArray Name="ListAttrNames">
       <Item Value="CfsName"/>
     </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="CfsName"/>
+    </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
   <ListBinding
     Name="LOV_CfName"
-    ListVOName="CFNNsmrVO1"
+    ListVOName="CNFNameNewVO1"
     ListRangeSize="-1"
     NullValueFlag="none"
     NullValueId="LOV_CfName_LOVUIHints_NullValueId"
@@ -99,11 +114,14 @@
     <AttrArray Name="ListAttrNames">
       <Item Value="CfsName"/>
     </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="CfsName"/>
+    </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
   <ListBinding
     Name="LOV_ForwardErName"
-    ListVOName="ForworderNameVO1"
+    ListVOName="ForwarderNameNewVO1"
     ListRangeSize="-1"
     NullValueFlag="start"
     NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
@@ -112,6 +130,9 @@
       <Item Value="ForwardErName"/>
     </AttrArray>
     <AttrArray Name="ListAttrNames">
+      <Item Value="ForworderName"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
       <Item Value="ForworderName"/>
     </AttrArray>
     <DisplayCriteria/>
