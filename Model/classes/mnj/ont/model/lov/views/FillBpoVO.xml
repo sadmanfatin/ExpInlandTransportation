@@ -107,7 +107,7 @@
       from PACKING_LIST_VIEW v1
             where  v1.creation_date >= sysdate-180
             
-            union
+            union all
             
             
             select v2.org DIVISION_ID ,
